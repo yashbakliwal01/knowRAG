@@ -20,7 +20,8 @@ public class RetrievalService {
 	}
 	
 	public String retrieveContext(String query) {
-		List<Document> documents = documentRepository.search(query);
+		String normalized = normalizeQuery(query);
+		List<Document> documents = documentRepository.search(normalized);
 		
 		if(documents.isEmpty()) {
 			return "No relevant information found.";
@@ -30,6 +31,29 @@ public class RetrievalService {
 				.limit(3)
 				.map(Document::getContent)
 				.collect(Collectors.joining("\n"));
+		
+	}
+
+	private String normalizeQuery(String query) {
+		String q = query.toLowerCase();
+		
+		//leave related
+		if(q.contains("leave") || q.contains("vacation") || q.contains("time off")) {
+			return "leave";
+		}
+		
+		//related to wfh
+		if(q.contains("work from home") || q.contains("remote") || q.contains("wfh") || q.contains("remote work")) {
+			return "wfh";
+		}
+		
+		// holidays
+	    if (q.contains("holiday") || q.contains("festival")) {
+	        return "holiday";
+	    }
+	    
+	    return query;
+		
 		
 	}
 }

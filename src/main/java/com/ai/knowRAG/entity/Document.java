@@ -24,4 +24,8 @@ public class Document {
 	
 	@Column(columnDefinition = "TEXT")
 	private String content;
+	
+	public String getContent() {
+		return content;
+	}
 }
