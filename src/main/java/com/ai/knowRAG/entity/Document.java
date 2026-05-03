@@ -25,7 +25,9 @@ public class Document {
 	@Column(columnDefinition = "TEXT")
 	private String content;
 	
-	public String getContent() {
-		return content;
-	}
+	@Column(columnDefinition = "JSON")
+	private String embedding;
+	
+	@Column(name = "embedding_updated_at")
+	private Long embeddingUpdatedAt;
 }

@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ai.knowRAG.entity.Document;
 
-public interface DocumentRepository extends JpaRepository<Document, Long> {
+public interface DocumentRepository extends JpaRepository<Document, Long>{
 
 	@Query("""
 			SELECT d FROM Document d
@@ -16,5 +16,18 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
 			   OR LOWER(d.content) LIKE LOWER(CONCAT('%', :query, '%'))
 			""")
 	List<Document> search(@Param("query") String query);
+
+	@Query("""
+			SELECT d FROM Document d 
+			WHERE d.embedding IS NOT NULL
+			ORDER BY d.id
+			""")
+	List<Document> findAllWithEmbeddings();
+
+	@Query("""
+			SELECT d FROM Document d
+			WHERE d.embedding IS NULL
+			""")
+	List<Document> findDocumentsWithoutEmbeddings();
 
 }
